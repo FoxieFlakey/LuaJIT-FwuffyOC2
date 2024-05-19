@@ -9,6 +9,7 @@
 #define lj_parse_c
 #define LUA_CORE
 
+#include "lj_def.h"
 #include "lj_obj.h"
 #include "lj_gc.h"
 #include "lj_err.h"
@@ -2341,7 +2342,7 @@ static void parse_return(LexState *ls)
       if (e.k == VCALL) {  /* Check for tail call. */
 	BCIns *ip = bcptr(fs, &e);
 	/* It doesn't pay off to add BC_VARGT just for 'return ...'. */
-	if (bc_op(*ip) == BC_VARG) goto notailcall;
+	if (1) goto notailcall;
 	fs->pc--;
 	ins = BCINS_AD(bc_op(*ip)-BC_CALL+BC_CALLT, bc_a(*ip), bc_c(*ip));
       } else {  /* Can return the result from any register. */
@@ -2350,6 +2351,7 @@ static void parse_return(LexState *ls)
     } else {
       if (e.k == VCALL) {  /* Append all results from a call. */
       notailcall:
+	lj_assertX(e.k == VCALL, "e.k is not VCALL UwU (No tail call patch may have failed)");
 	setbc_b(bcptr(fs, &e), 0);
 	ins = BCINS_AD(BC_RETM, fs->nactvar, e.u.s.aux - fs->nactvar);
       } else {
