@@ -14,16 +14,7 @@
 
 /* Default path for loading Lua and C modules with require(). */
 #if defined(_WIN32)
-/*
-** In Windows, any exclamation mark ('!') in the path is replaced by the
-** path of the directory of the executable file of the current process.
-*/
-#define LUA_LDIR	"!\\lua\\"
-#define LUA_CDIR	"!\\"
-#define LUA_PATH_DEFAULT \
-  ".\\?.lua;" LUA_LDIR"?.lua;" LUA_LDIR"?\\init.lua;"
-#define LUA_CPATH_DEFAULT \
-  ".\\?.dll;" LUA_CDIR"?.dll;" LUA_CDIR"loadall.dll"
+# error "Fwuffy OC2's LuaJIT fork doesn't support Windows"
 #else
 /*
 ** Note to distribution maintainers: do NOT patch the following lines!
@@ -35,31 +26,27 @@
 #ifndef LUA_LMULTILIB
 #define LUA_LMULTILIB	"lib"
 #endif
-#define LUA_LROOT	"/usr/local"
-#define LUA_LUADIR	"/lua/5.1/"
-#define LUA_LJDIR	"/luajit-2.1/"
-
-#ifdef LUA_ROOT
-#define LUA_JROOT	LUA_ROOT
-#define LUA_RLDIR	LUA_ROOT "/share" LUA_LUADIR
-#define LUA_RCDIR	LUA_ROOT "/" LUA_MULTILIB LUA_LUADIR
-#define LUA_RLPATH	";" LUA_RLDIR "?.lua;" LUA_RLDIR "?/init.lua"
-#define LUA_RCPATH	";" LUA_RCDIR "?.so"
-#else
-#define LUA_JROOT	LUA_LROOT
-#define LUA_RLPATH
-#define LUA_RCPATH
-#endif
-
-#define LUA_JPATH	";" LUA_JROOT "/share" LUA_LJDIR "?.lua"
-#define LUA_LLDIR	LUA_LROOT "/share" LUA_LUADIR
-#define LUA_LCDIR	LUA_LROOT "/" LUA_LMULTILIB LUA_LUADIR
-#define LUA_LLPATH	";" LUA_LLDIR "?.lua;" LUA_LLDIR "?/init.lua"
-#define LUA_LCPATH1	";" LUA_LCDIR "?.so"
-#define LUA_LCPATH2	";" LUA_LCDIR "loadall.so"
-
-#define LUA_PATH_DEFAULT	"./?.lua" LUA_JPATH LUA_LLPATH LUA_RLPATH
-#define LUA_CPATH_DEFAULT	"./?.so" LUA_LCPATH1 LUA_RCPATH LUA_LCPATH2
+/*
+See /notes.txt in github.com/FoxieFlakey/FwuffySys repository
+*/
+#define LUA_PATH_DEFAULT	\
+  "/app/rw/local/lib/?.lua;" \
+  "/app/ro/lib/?.lua;" \
+   \
+  "/vendor/runtime/product/lib/?.lua;" \
+  "/vendor/runtime/local/lib/?.lua;" \
+  "/vendor/runtime/lib/?.lua;" \
+   \
+  "/system/runtime/local/lib/?.lua;" \
+  "/system/runtime/lib/?.lua;" \
+   \
+  "/vendor/product/lib/?.lua;" \
+  "/vendor/local/lib/?.lua;" \
+  "/vendor/lib/?.lua;" \
+   \
+  "/system/local/lib/?.lua;" \
+  "/system/lib/?.lua"
+#define LUA_CPATH_DEFAULT	"/non_existent"
 #endif
 
 /* Environment variable names for path overrides and initialization code. */
